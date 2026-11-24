@@ -1,0 +1,5 @@
+En esta carpeta se guardan los reportes que genera la ejecucion de la prueba:
+  - resumen.txt
+  - resumen.json
+  - dashboard.html
+Subir estos archivos al repositorio despues de ejecutar la prueba.

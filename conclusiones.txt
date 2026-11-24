@@ -1,0 +1,45 @@
+CONCLUSIONES - PRUEBA DE CARGA LOGIN
+
+Fecha de ejecución: ___
+Escenario: 20 logins por segundo durante 2 minutos
+Servicio: POST https://fakestoreapi.com/auth/login
+
+Resultados
+- Total de peticiones: 2400
+- TPS alcanzado: 19,94 (2400 peticiones en 120,4 segundos)
+- Iteraciones perdidas (dropped_iterations): 0
+- Tiempo de respuesta promedio: 419 ms
+- Tiempo de respuesta mediana: 408 ms
+- Tiempo de respuesta p(90): 452 ms
+- Tiempo de respuesta p(95): 472 ms
+- Tiempo de respuesta mínimo: 381 ms
+- Tiempo de respuesta máximo: 1164 ms (1,16 s)
+- Porcentaje de errores: 0% (0 de 2400)
+- Checks correctos: 100% (7200 de 7200)
+- Usuarios virtuales utilizados: entre 7 y 14 (20 disponibles)
+
+Criterios de aceptación
+- Al menos 20 TPS: CUMPLE. Se ejecutaron las 2400 peticiones planificadas sin iteraciones perdidas. El valor de 19,94 se debe a que k6 divide por la duración total, que incluye el cierre de las últimas peticiones.
+- Tiempo de respuesta máximo de 1,5 s: CUMPLE. El p(95) fue de 472 ms y el máximo de 1,16 s, por lo que todas las peticiones respondieron por debajo del límite.
+- Tasa de error menor al 3%: CUMPLE. No hubo errores.
+
+Hallazgos
+- El servicio soportó los 20 TPS durante los 2 minutos sin errores.
+- Los tiempos de respuesta fueron estables: el 90% de las peticiones respondió entre 381 y 452 ms.
+- El tiempo máximo (1,16 s) fue un caso aislado; el p(95) se mantuvo en 472 ms.
+- Casi todo el tiempo de respuesta corresponde a la espera de la respuesta del servidor (http_req_waiting: 419 ms promedio). El envío y la recepción de datos fueron menores a 1 ms.
+- La conexión se reutilizó entre peticiones: el tiempo de conexión y de TLS fue 0 en la mayoría de los casos.
+- Todas las respuestas devolvieron el token de autenticación.
+- k6 necesitó como máximo 14 usuarios virtuales para mantener la carga, por debajo de los 20 preasignados.
+
+Conclusión
+El servicio de login cumple con los criterios de la prueba: soporta 20 TPS con un tiempo de respuesta p(95) de 472 ms (límite 1500 ms) y 0% de errores (límite 3%).
+
+Observaciones
+- FakeStoreAPI es una API pública, por lo que los tiempos pueden variar según el horario y la cantidad de gente que la esté usando.
+- Los tiempos incluyen la latencia de mi conexión a internet.
+
+Recomendaciones
+- Repetir la prueba en otros horarios para comparar resultados.
+- Subir la carga de a poco (por ejemplo 40 y 60 TPS) para ver hasta dónde aguanta el servicio.
+- Hacer una prueba más larga (por ejemplo 30 minutos) para ver si los tiempos se mantienen estables en el tiempo.
