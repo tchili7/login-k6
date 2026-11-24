@@ -26,7 +26,7 @@ Pasos para ejecutar
    k6 version
 
 3. Clonar el repositorio y entrar a la carpeta
-   git clone <url del repositorio>
+   git clone https://github.com/tu-usuario/performance-login-k6.git
    cd performance-login-k6
 
 4. Ejecutar la prueba
